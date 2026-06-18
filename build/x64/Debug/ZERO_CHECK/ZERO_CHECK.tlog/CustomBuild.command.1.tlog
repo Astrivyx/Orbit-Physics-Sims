@@ -1,0 +1,10 @@
+^C:\USERS\JRMAC\ONEDRIVE\DOCUMENTS\PHYSICS SIMS\ORBIT PHYSICS SIMS\BUILD\CMAKEFILES\1B68C5396E01D4C5DDEFB07CEE20E514\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/jrmac/OneDrive/Documents/Physics Sims/Orbit Physics Sims" "-BC:/Users/jrmac/OneDrive/Documents/Physics Sims/Orbit Physics Sims/build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Users/jrmac/OneDrive/Documents/Physics Sims/Orbit Physics Sims/build/OpenGLProject.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
