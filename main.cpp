@@ -30,5 +30,7 @@ int main()
     std::cout << Earth.Mass << std::endl;
     Earth.MassChange(10);
     std::cout << Earth.Mass << std::endl;
+    Earth.MassChange(-10);
+    std::cout << Earth.Mass << std::endl;
     return 0;
 }
