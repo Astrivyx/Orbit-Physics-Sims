@@ -1,8 +1,0 @@
-================================================================================
-Linker Errors
-Generated: 2026-06-18T03:26:38.341Z
-Total Errors: 1
-================================================================================
-
-[LNK1168] (MSVC)
-cannot open C:\Users\jrmac\OneDrive\Documents\Physics Sims\Orbit Physics Sims\build\Debug\opengl_app.exe for writing [C:\Users\jrmac\OneDrive\Documents\Physics Sims\Orbit Physics Sims\build\opengl_app.vcxproj]
