@@ -3,47 +3,17 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <chrono>
 
-class Planet
-{
-    public:
-
-    int Mass;
-
-    Planet(int M)
+std::vector<float> PlanetMath(float Radius,float x,float y)
     {
-        Mass = M;
-    }
-    
-    void MassChange(int Change)
-    {
-        Mass += Change;
-    }
-
-};
-
-
-    void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-    {
-    glViewport(0, 0, width, height);
-    }  
-
-    void processInput(GLFWwindow *window) // uses window to process input
-    {
-        if(glfwGetKey(window,GLFW_KEY_ESCAPE) == GLFW_PRESS) // uses glfw to detect key pressed while user is in window
-        {
-            glfwSetWindowShouldClose(window, true); // closes
-        }
-    }
-
-
-    std::vector<float> PlanetMath()
-    {
+        int WorldSize = 10000;
         const int  Segments = 50;
-        float Radius = 0.3f;
         float Pi = 3.14159;
-        float x = -0.5f;
-        float y = 0.5f;
+        x = x/(WorldSize/2);
+        y= y/(WorldSize/2);
+        Radius = Radius/(WorldSize/2);
+
         std::vector<float> Verticies;
         Verticies.push_back(x);
         Verticies.push_back(y);
@@ -65,6 +35,48 @@ class Planet
         }
         return Verticies;
     };
+class Planet
+{
+    public:
+
+    double Mass;
+    double Vel;
+    double Xpos;
+    double Ypos;
+    double Radius;
+
+    Planet(double M,double R,double A,double X,double Y)
+    {
+        Mass = M;
+        Radius = R;
+        Vel = A;
+        Xpos = X;
+        Ypos = Y;
+    }
+    
+    void PosChange(double x,double y)
+    {
+     Xpos += x;
+     Ypos += y;
+     PlanetMath(Radius,Xpos,Ypos);
+    }
+    
+
+};
+
+
+    void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+    {
+    glViewport(0, 0, width, height);
+    }  
+
+    void processInput(GLFWwindow *window) // uses window to process input
+    {
+        if(glfwGetKey(window,GLFW_KEY_ESCAPE) == GLFW_PRESS) // uses glfw to detect key pressed while user is in window
+        {
+            glfwSetWindowShouldClose(window, true); // closes
+        }
+    }
 int main()
 {
     // ---- WINDOW SETUP ----
@@ -91,8 +103,11 @@ int main()
 
     glfwSetFramebufferSizeCallback(OrbitSim, framebuffer_size_callback);
 
+
+    Planet Earth = Planet(323753.610726,600,0,200,600);
+    Planet Venus = Planet(263840.598674,0,0,0,1);
     // ---- VERTEX DATA ----
-    std::vector<float> vertices = PlanetMath();
+    std::vector<float> vertices = PlanetMath(Earth.Radius,Earth.Xpos,Earth.Ypos);
 
     // ---- BUFFER SETUP ----
     unsigned int VBO;
@@ -102,7 +117,7 @@ int main()
 
     glBindVertexArray(VAO); // bind VAO first, then VBO
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(float), vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(float), vertices.data(), GL_DYNAMIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
@@ -158,10 +173,12 @@ int main()
     glDeleteShader(fragmentShader);
 
     // ---- RENDER LOOP ----
+    double LastFrame = 0;
+    double xPosChange = 0;
     while (!glfwWindowShouldClose(OrbitSim))
     {
+        double StartFrameTime = glfwGetTime();
         processInput(OrbitSim);
-
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -172,15 +189,12 @@ int main()
 
         glfwSwapBuffers(OrbitSim);
         glfwPollEvents();
+        std::cout<<StartFrameTime-LastFrame<<std::endl;
+        std::cout<<"Fps Per Second:"<<1/(StartFrameTime-LastFrame)<<std::endl;
+        LastFrame = StartFrameTime;
     }
 
     // ---- PLANET TEST ----
-    Planet Earth = Planet(20000);
-    std::cout << Earth.Mass << std::endl;
-    Earth.MassChange(10);
-    std::cout << Earth.Mass << std::endl;
-    Earth.MassChange(-10);
-    std::cout << Earth.Mass << std::endl;
 
     glfwTerminate();
     return 0;
